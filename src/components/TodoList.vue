@@ -190,7 +190,7 @@ color: #ccc;
   font-size: 16px;
   margin-bottom: 14px;
   margin-top: 14px;
-  border-top: 1px solid grey;
+  /* border-top: 1px solid grey; */
 }
 /* css transition */
 .fade-enter-active, .fade-leave-active {
