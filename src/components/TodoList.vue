@@ -180,7 +180,7 @@ width: 25%;
   color: black;
 }
 .completed{
-text-decoration: line-through;
+text-decoration:line-through;
 color: #ccc;
 }
 .extra-container{
