@@ -9,7 +9,10 @@
         placeholder="What needs to be done"
         v-model="newTodo"
         @keyup.enter="addTodo"
-        v-focus/>
+        v-focus
+        pattern="[a-zA-Z0-9]+"
+        title="Please enter alphanumeric characters only"
+        />
         <button @click="addTodo" class="todo-btn">Add todo</button>
    </div>
       <transition-group name = "fade" enter-active-class = "animate__animated animate__fadeInUp" leave-active-class= " animate__animated animate__fadeOutDown">
@@ -232,6 +235,7 @@ button {
     border: 1px solid grey;
     border-radius: 6px;
     padding: 6px;
+    cursor: pointer;
   }
   button:hover{
       background: lightgreen;
