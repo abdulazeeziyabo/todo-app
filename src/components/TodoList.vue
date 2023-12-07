@@ -12,8 +12,8 @@
         v-focus/>
         <button @click="addTodo" class="todo-btn">Add todo</button>
    </div>
-      <transition-group name = "fade" enter-active-class = "fade-enter-active" leave-active-class= "fade-leave-active">
-  <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
+      <transition-group name = "fade" enter-active-class = "animate__animated animate__fadeInUp" leave-active-class= " animate__animated animate__fadeOutDown">
+  <div v-for="(todo, index) in todosFilter" :key="todo.id" class="todo-item">
     <div class="todo-item-left">
       <input type="checkbox" v-model="todo.completed">
       <div class="todo-item-label" :class="{completed :todo.completed}" v-if="!todo.editing" @dblclick="editTodo(todo)">
@@ -40,10 +40,23 @@
   </div>
   <div>{{remaining}} items left</div>
   </div>
+  <div class="extra-container">
+    <div class='wrapper-btn'>
+      <button :class="{active: filter == 'all'}" @click="filter = 'all'">All</button>
+      <button :class="{active: filter == 'active'}" @click = "filter = 'active'">Active</button>
+      <button :class ="{active: filter == 'completed'}" @click="filter = 'completed'">Completed </button>
+    </div>
+    <div>
+     <transition name = "fade">
+      <button v-if="showClearCompletedButton" @click="clearCompleted">Clear Completed</button>
+    </transition>
+    </div>
+  </div>
   </div>
 </template>
 
 <script>
+import 'animate.css';
 export default {
   name: 'todo-list',
   data() {
@@ -51,6 +64,7 @@ export default {
       newTodo: '',
       idForTodo: 3,
       beforeEditCache: '',
+      filter:'all',
       todos: JSON.parse(localStorage.getItem('todos')) || [],
     };
   },
@@ -66,7 +80,20 @@ export default {
       },
       anyRemaining(){
         return this.remaining != 0
-      }
+      },
+      todosFilter(){
+        if(this.filter == 'all'){
+          return this.todos
+        }else if(this.filter == 'active'){
+          return this.todos.filter(todo => !todo.completed)
+        }else if (this.filter == 'completed'){
+          return this.todos.filter(todo => todo.completed)
+        }
+        return this.todos
+      },
+      showClearCompletedButton(){
+        return this.todos.filter(todo => todo.completed).length >0
+      },
     },
   methods: {
     addTodo() {
@@ -111,6 +138,9 @@ export default {
     },
     saveToLocalStorage(){
       localStorage.setItem('todos', JSON.stringify(this.todos))
+    },
+    clearCompleted(){
+      this.todos = this.todos.filter(todo => !todo.completed)
     }
   },
 };
@@ -118,8 +148,6 @@ export default {
 
 
 <style>
-@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
-
 .wrapper{
   display: flex;
   
@@ -132,7 +160,7 @@ export default {
  margin-bottom: 16px;
 }
 .todo-input:focus{
-border: 2px solid black;
+border: 2px solid green;
   outline: 0;
 }
 .todo-item{
@@ -140,7 +168,7 @@ border: 2px solid black;
   justify-content: space-between;
   margin-bottom: 18px;
   font-size: 18px;
-  /* animation-duration:0.2s */
+  animation-duration:0.2s
   
 }
 .todo-item-left{
@@ -191,10 +219,36 @@ color: #ccc;
   margin-bottom: 14px;
   margin-top: 14px;
   /* border-top: 1px solid grey; */
+
 }
+.wrapper-btn{
+  display: flex;
+  gap: 8px;
+}
+button {
+    font-size: 14px;
+    background-color: white;
+    appearance: none;
+    border: 1px solid grey;
+    border-radius: 6px;
+    padding: 6px;
+  }
+  button:hover{
+      background: lightgreen;
+    }
+
+  button:focus {
+      outline: none;
+    }
+  
+
+  .active {
+    background: lightgreen;
+  }
+
 /* css transition */
 .fade-enter-active, .fade-leave-active {
-    transition: opacity .2s;
+    transition: opacity 0.2s;
   }
 
   .fade-enter, .fade-leave-to {
