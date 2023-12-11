@@ -12,6 +12,7 @@
         v-focus
         pattern="[a-zA-Z0-9]+"
         title="Please enter alphanumeric characters only"
+        maxlength="40"
         />
         <button @click="addTodo" class="todo-btn">Add todo</button>
    </div>
@@ -78,6 +79,7 @@ export default {
     },
   },
    computed:{
+    limitedText(){},
       remaining(){
         return this.todos.filter(todo => !todo.completed).length
       },
@@ -113,7 +115,6 @@ export default {
       this.idForTodo++;
       this.saveToLocalStorage();
     },
-   
     editTodo(todo) {
       this.beforeEditCache = todo.title;
       todo.editing = true; //to edit todo on doubleclick
@@ -158,7 +159,12 @@ export default {
 }
 .todo-input{
  width: 100%;
- padding: 10px 18px;
+ max-width: 400px;
+ /* padding: 10px 18px; */
+ height:50px;
+ word-wrap: break-word;
+ white-space: pre-wrap;
+ overflow: auto;
  font-size: 18px;
  margin-bottom: 16px;
 }
@@ -182,6 +188,8 @@ border: 2px solid green;
   padding: 10px;
   border:1px solid white;
   margin-left: 12px;
+  word-wrap: break-word;
+  /* height: 50px; */
 }
 .todo-item-edit{
   font-size: 24px;
